@@ -26,6 +26,7 @@
           <th scope="col">phone</th>
           <th scope="col">gender</th>
           <th scope="col">verificationStatus</th>
+          <th>Button</th>
         </tr>
       </thead>
       <% allUser.map((user)=>{ %>
@@ -38,6 +39,13 @@
           <td><%= user.phone %></td>
           <td><%= user.gender %></td>
           <td><%= user.verificationStatus %></td>
+          <td>
+ 
+           <form action="/delete/<%= user._id %>" method="post">
+           <button >Delete</button>
+          </form>
+ 
+          </td>
          </tr>
      <% }) %>
       <tbody></tbody>

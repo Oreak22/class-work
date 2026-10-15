@@ -2,7 +2,10 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const userModel = require("./model/user.model");
+const { signin, register } = require("./controllers/authentication.controller");
 require("dotenv").config();
+
+const userRouter = require("./routes/auth.route");
 
 const port = process.env.port;
 const DBURI = process.env.mongoDB_URI;
@@ -19,36 +22,12 @@ const user = [
   },
 ];
 
-app.get("/user", (req, res) => {
-  res.send(user);
-});
+// app.get("/user",);
 
-app.get("/signin", (req, res) => {
-  res.render("signin");
-});
+app.use("/auth", userRouter);
 
-app.post("/register", async (req, res) => {
-  console.log(req.body);
 
-  try {
-    const newUser = new userModel(req.body);
 
-    const savedUser = await newUser.save();
-    console.log(savedUser);
-  } catch (err) {
-    console.log(err);
-  }
-});
-
-app.get("/allUser", async (req, res) => {
-  try {
-    const allUser = await userModel.find();
-    res.render("records", { allUser });
-    // res.json(allUser);
-  } catch (err) {
-    console.log(err);
-  }
-});
 
 app.post("/dbuser", async (req, res) => {
   try {
@@ -65,6 +44,18 @@ app.get("/editform", async (req, res) => {
       email: "benexyteg@mailinator.com",
     });
     res.render("edit", { PrevRecord });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post("/delete/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    await userModel.findByIdAndDelete(id);
+
+    res.redirect("/allUser");
   } catch (err) {
     console.log(err);
   }
