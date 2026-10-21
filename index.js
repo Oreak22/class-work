@@ -12,6 +12,7 @@ const DBURI = process.env.mongoDB_URI;
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 const user = [
   {
@@ -25,9 +26,6 @@ const user = [
 // app.get("/user",);
 
 app.use("/auth", userRouter);
-
-
-
 
 app.post("/dbuser", async (req, res) => {
   try {

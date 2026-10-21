@@ -1,5 +1,6 @@
 const userModel = require("../model/user.model");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const signin = (req, res) => {
   res.render("signin");
@@ -25,12 +26,32 @@ const login = async (req, res) => {
     console.log(verify);
 
     if (verify) {
-      res.status(200).send({ message: "my guy its been a while" });
+      const payload = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      };
+
+      const token = await jwt.sign({ payload }, process.env.jwt_secret, {
+        expiresIn: "2min",
+      });
+
+      res.status(200).send({ message: "my guy its been a while", token });
     } else {
       res.status(401).send({ message: "you are a bad person, shuuuu" });
     }
 
     res.send("i dey work");
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const dashboard = async (req, res) => {
+  try {
+    const bearerToken = req.headers.authorization;
+
+
   } catch (err) {
     console.log(err);
   }
@@ -66,4 +87,4 @@ const allUser = async (req, res) => {
   }
 };
 
-module.exports = { signin, register, allUser, login, loginform };
+module.exports = { signin, register, allUser, login, loginform, dashboard };

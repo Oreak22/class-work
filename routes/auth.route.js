@@ -5,6 +5,7 @@ const {
   register,
   login,
   loginform,
+  dashboard,
 } = require("../controllers/authentication.controller");
 const router = express.Router();
 
@@ -14,5 +15,7 @@ router.post("/login", login);
 router.get("/loginform", loginform);
 
 router.get("/allUser", allUser);
+
+router.get("/dashboard", dashboard);
 
 module.exports = router;
